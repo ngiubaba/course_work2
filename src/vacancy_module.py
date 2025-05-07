@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
 
 class Vacancy:
@@ -45,7 +45,7 @@ class Vacancy:
         if isinstance(salary, dict) and len(salary) > 0:
             self.salary_from = salary.get("from") if salary.get("from") else "Не указана"
             self.salary_to = salary.get("to") if salary.get("to") else "Не указана"
-            return self.salary_to, self.salary_from
+        return self.salary_to, self.salary_from
 
     @staticmethod
     def _validate_url(url: str) -> str:
@@ -83,14 +83,16 @@ class Vacancy:
         """
         filtered_vacancies = []
         for vacancy in vacancies:
-            snippet = vacancy['snippet'] if vacancy.get('snippet') else {}
-            responsibility = snippet.get('responsibility', "Нет описания")
-            filtered_vacancies.append(cls(
-                name=vacancy.get("name"),
-                url=vacancy.get("alternate_url"),
-                salary=vacancy.get("salary"),
-                responsibility=responsibility
-            ))
+            snippet = vacancy["snippet"] if vacancy.get("snippet") else {}
+            responsibility = snippet.get("responsibility", "Нет описания")
+            filtered_vacancies.append(
+                cls(
+                    name=vacancy.get("name") or "",
+                    url=vacancy.get("alternate_url") or "",
+                    salary=vacancy.get("salary"),
+                    responsibility=responsibility,
+                )
+            )
         return filtered_vacancies
 
     def to_dict(self) -> Dict[str, Any]:

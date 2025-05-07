@@ -1,15 +1,20 @@
 import pytest
+
 from src.vacancy_module import Vacancy
 
 
-def test_vacancy_creation_valid():
+def test_vacancy_creation_valid() -> None:
     """
     Тестирует создание объекта Vacancy с валидными данными.
     Проверяется, что все атрибуты вакансии корректно инициализируются.
     """
     salary = {"from": 50000, "to": 70000}
-    vacancy = Vacancy(name="Software Engineer", url="https://example.com",
-                      responsibility="Develop software using Python.", salary=salary)
+    vacancy = Vacancy(
+        name="Software Engineer",
+        url="https://example.com",
+        responsibility="Develop software using Python.",
+        salary=salary,
+    )
 
     assert vacancy.name == "Software Engineer"
     assert vacancy.url == "https://example.com"
@@ -18,48 +23,58 @@ def test_vacancy_creation_valid():
     assert vacancy.responsibility == "Develop software using Python."
 
 
-def test_vacancy_creation_invalid_name():
+def test_vacancy_creation_invalid_name() -> None:
     """
     Тестирует создание объекта Vacancy с некорректным значением имени.
     Ожидается выброс исключения ValueError с соответствующим сообщением.
     """
     with pytest.raises(ValueError, match="Ожидался str name"):
-        Vacancy(name="", url="https://example.com", responsibility="Develop software using Python.",
-                salary={"from": 50000, "to": 70000})
+        Vacancy(
+            name="",
+            url="https://example.com",
+            responsibility="Develop software using Python.",
+            salary={"from": 50000, "to": 70000},
+        )
 
 
-def test_vacancy_creation_invalid_url():
+def test_vacancy_creation_invalid_url() -> None:
     """
     Тестирует создание объекта Vacancy с некорректным URL.
     Ожидается выброс исключения ValueError с соответствующим сообщением.
     """
     with pytest.raises(ValueError, match="Ожидался str url"):
-        Vacancy(name="Software Engineer", url="", responsibility="Develop software using Python.",
-                salary={"from": 50000, "to": 70000})
+        Vacancy(
+            name="Software Engineer",
+            url="",
+            responsibility="Develop software using Python.",
+            salary={"from": 50000, "to": 70000},
+        )
 
 
-def test_vacancy_creation_invalid_responsibility():
+def test_vacancy_creation_invalid_responsibility() -> None:
     """
     Тестирует создание объекта Vacancy с некорректным описанием обязанностей.
     Ожидается выброс исключения ValueError с соответствующим сообщением.
     """
     with pytest.raises(ValueError, match="Ожидался str responsibility"):
-        Vacancy(name="Software Engineer", url="https://example.com", responsibility="",
-                salary={"from": 50000, "to": 70000})
+        Vacancy(
+            name="Software Engineer", url="https://example.com", responsibility="", salary={"from": 50000, "to": 70000}
+        )
 
 
-def test_vacancy_creation_no_salary():
+def test_vacancy_creation_no_salary() -> None:
     """
     Тестирует создание объекта Vacancy без указания зарплаты.
     Ожидается, что зарплата будет установлена как "Не указана".
     """
-    vacancy = Vacancy(name="Software Engineer", url="https://example.com",
-                      responsibility="Develop software using Python.", salary={})
+    vacancy = Vacancy(
+        name="Software Engineer", url="https://example.com", responsibility="Develop software using Python.", salary={}
+    )
     assert vacancy.salary_from == "Не указана"
     assert vacancy.salary_to == "Не указана"
 
 
-def test_dict_to_list_vacancy():
+def test_dict_to_list_vacancy() -> None:
     """
     Тестирует метод dict_to_list_vacancy, который преобразует список словарей в список объектов Vacancy.
     Проверяется, что объекты Vacancy правильно создаются на основе данных в словарях.
@@ -69,14 +84,14 @@ def test_dict_to_list_vacancy():
             "name": "Software Engineer",
             "alternate_url": "https://example.com/1",
             "salary": {"from": 50000, "to": 70000},
-            "snippet": {"responsibility": "Develop software using Python."}
+            "snippet": {"responsibility": "Develop software using Python."},
         },
         {
             "name": "Data Scientist",
             "alternate_url": "https://example.com/2",
             "salary": {"from": 60000, "to": 90000},
-            "snippet": {"responsibility": "Analyze data using Python."}
-        }
+            "snippet": {"responsibility": "Analyze data using Python."},
+        },
     ]
 
     vacancies = Vacancy.dict_to_list_vacancy(vacancies_dict)
@@ -89,14 +104,18 @@ def test_dict_to_list_vacancy():
     assert vacancies[0].responsibility == "Develop software using Python."
 
 
-def test_vacancy_to_dict():
+def test_vacancy_to_dict() -> None:
     """
     Тестирует метод to_dict, который преобразует объект Vacancy в словарь.
     Проверяется, что все атрибуты объекта корректно преобразуются в словарь.
     """
     salary = {"from": 50000, "to": 70000}
-    vacancy = Vacancy(name="Software Engineer", url="https://example.com",
-                      responsibility="Develop software using Python.", salary=salary)
+    vacancy = Vacancy(
+        name="Software Engineer",
+        url="https://example.com",
+        responsibility="Develop software using Python.",
+        salary=salary,
+    )
 
     vacancy_dict = vacancy.to_dict()
     assert vacancy_dict["name"] == "Software Engineer"

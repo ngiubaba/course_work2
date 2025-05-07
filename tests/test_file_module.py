@@ -1,12 +1,15 @@
 import json
 import os
+from pathlib import Path
+
 import pytest
+
 from src.file_module import FileChange
 from src.vacancy_module import Vacancy
 
 
 @pytest.fixture
-def sample_vacancy():
+def sample_vacancy() -> Vacancy:
     """
     Фикстура для создания объекта вакансии для тестов.
     """
@@ -14,12 +17,12 @@ def sample_vacancy():
         name="Python Developer",
         url="https://hh.ru/vacancy/123",
         responsibility="Разработка и поддержка",
-        salary={"from": 100000, "to": 150000}
+        salary={"from": 100000, "to": 150000},
     )
 
 
 @pytest.fixture
-def temp_file(tmp_path):
+def temp_file(tmp_path: Path) -> Path:
     """
     Фикстура для создания временного файла для тестирования.
     """
@@ -29,14 +32,14 @@ def temp_file(tmp_path):
 
 
 @pytest.fixture
-def file_change(temp_file):
+def file_change(temp_file: Path) -> FileChange:
     """
     Фикстура для создания экземпляра класса FileChange с временным файлом.
     """
     return FileChange(file_name=temp_file.name)
 
 
-def test_save_and_load_file(file_change, sample_vacancy, tmp_path):
+def test_save_and_load_file(file_change: FileChange, sample_vacancy: Vacancy, tmp_path: Path) -> None:
     """
     Тестирует сохранение вакансии в файл и последующую загрузку.
     Проверяется, что файл создается, и данные корректно сохраняются и загружаются.
@@ -51,7 +54,7 @@ def test_save_and_load_file(file_change, sample_vacancy, tmp_path):
         assert data[0]["url"] == sample_vacancy.url
 
 
-def test_load_nonexistent_file(monkeypatch):
+def test_load_nonexistent_file(monkeypatch) -> None:
     """
     Тестирует загрузку несуществующего файла.
     Проверяется, что при отсутствии файла возвращается пустой список.
@@ -62,7 +65,7 @@ def test_load_nonexistent_file(monkeypatch):
     assert fc.load_vacancies_from_file() == []
 
 
-def test_save_file_does_not_duplicate(file_change, sample_vacancy):
+def test_save_file_does_not_duplicate(file_change: FileChange, sample_vacancy: Vacancy) -> None:
     """
     Тестирует, что при сохранении одной и той же вакансии несколько раз, она не дублируется в файле.
     """

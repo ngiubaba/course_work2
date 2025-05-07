@@ -1,18 +1,35 @@
-from src.user_iteration import filter_vacancies, get_vacancies_by_salary, get_top_vacancies
+from typing import Any
+
+from src.user_iteration import filter_vacancies, get_top_vacancies, get_vacancies_by_salary
 
 
-def test_filter_vacancies():
+def test_filter_vacancies() -> None:
     """
     Тестирует функцию filter_vacancies, которая фильтрует вакансии по ключевым словам в описании обязанностей.
     Проверяется, что вакансии с нужными ключевыми словами присутствуют в отфильтрованном списке.
     """
     vacancies = [
-        {"name": "Software Engineer", "url": "https://example.com/1", "salary_from": 50000,
-         "salary_to": 70000, "responsibility": "Develop software using Python."},
-        {"name": "Data Scientist", "url": "https://example.com/2", "salary_from": 60000,
-         "salary_to": 90000, "responsibility": "Analyze data using Python."},
-        {"name": "Web Developer", "url": "https://example.com/3", "salary_from": 40000,
-         "salary_to": 60000, "responsibility": "Develop websites using JavaScript."},
+        {
+            "name": "Software Engineer",
+            "url": "https://example.com/1",
+            "salary_from": 50000,
+            "salary_to": 70000,
+            "responsibility": "Develop software using Python.",
+        },
+        {
+            "name": "Data Scientist",
+            "url": "https://example.com/2",
+            "salary_from": 60000,
+            "salary_to": 90000,
+            "responsibility": "Analyze data using Python.",
+        },
+        {
+            "name": "Web Developer",
+            "url": "https://example.com/3",
+            "salary_from": 40000,
+            "salary_to": 60000,
+            "responsibility": "Develop websites using JavaScript.",
+        },
     ]
     keywords = ["python", "java"]
 
@@ -25,18 +42,33 @@ def test_filter_vacancies():
     assert any("java" in v["responsibility"] for v in filtered)
 
 
-def test_get_vacancies_by_salary():
+def test_get_vacancies_by_salary() -> None:
     """
     Тестирует функцию get_vacancies_by_salary, которая фильтрует вакансии по заданному диапазону зарплат.
     Проверяется, что функция корректно фильтрует вакансии в пределах указанного диапазона.
     """
     vacancies = [
-        {"name": "Software Engineer", "url": "https://example.com/1", "salary_from": 50000,
-         "salary_to": 70000, "responsibility": "Develop software using Python."},
-        {"name": "Data Scientist", "url": "https://example.com/2", "salary_from": 60000,
-         "salary_to": 90000, "responsibility": "Analyze data using Python."},
-        {"name": "Web Developer", "url": "https://example.com/3", "salary_from": 40000,
-         "salary_to": 60000, "responsibility": "Develop websites using JavaScript."},
+        {
+            "name": "Software Engineer",
+            "url": "https://example.com/1",
+            "salary_from": 50000,
+            "salary_to": 70000,
+            "responsibility": "Develop software using Python.",
+        },
+        {
+            "name": "Data Scientist",
+            "url": "https://example.com/2",
+            "salary_from": 60000,
+            "salary_to": 90000,
+            "responsibility": "Analyze data using Python.",
+        },
+        {
+            "name": "Web Developer",
+            "url": "https://example.com/3",
+            "salary_from": 40000,
+            "salary_to": 60000,
+            "responsibility": "Develop websites using JavaScript.",
+        },
     ]
     salary_range = "50000 - 80000"
 
@@ -45,18 +77,33 @@ def test_get_vacancies_by_salary():
     assert all(v["salary_from"] >= 50000 and v["salary_to"] <= 80000 for v in filtered_by_salary)
 
 
-def test_get_top_vacancies(capsys):
+def test_get_top_vacancies(capsys: Any) -> None:
     """
     Тестирует функцию get_top_vacancies, которая выводит топ-N вакансий из списка.
     Проверяется, что выводятся только топ-N вакансий, и что правильные вакансии отображаются в выводе.
     """
     vacancies = [
-        {"name": "Software Engineer", "url": "https://example.com/1", "salary_from": 50000,
-         "salary_to": 70000, "responsibility": "Develop software using Python."},
-        {"name": "Data Scientist", "url": "https://example.com/2", "salary_from": 60000,
-         "salary_to": 90000, "responsibility": "Analyze data using Python."},
-        {"name": "Web Developer", "url": "https://example.com/3", "salary_from": 40000,
-         "salary_to": 60000, "responsibility": "Develop websites using JavaScript."},
+        {
+            "name": "Software Engineer",
+            "url": "https://example.com/1",
+            "salary_from": 50000,
+            "salary_to": 70000,
+            "responsibility": "Develop software using Python.",
+        },
+        {
+            "name": "Data Scientist",
+            "url": "https://example.com/2",
+            "salary_from": 60000,
+            "salary_to": 90000,
+            "responsibility": "Analyze data using Python.",
+        },
+        {
+            "name": "Web Developer",
+            "url": "https://example.com/3",
+            "salary_from": 40000,
+            "salary_to": 60000,
+            "responsibility": "Develop websites using JavaScript.",
+        },
     ]
     n = 2
     get_top_vacancies(vacancies, n)

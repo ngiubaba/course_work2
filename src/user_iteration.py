@@ -1,4 +1,5 @@
-from typing import List, Dict
+from typing import Dict, List
+
 
 def filter_vacancies(list_vacancy: List[Dict], words: List[str]) -> List[Dict]:
     """
@@ -10,15 +11,17 @@ def filter_vacancies(list_vacancy: List[Dict], words: List[str]) -> List[Dict]:
     """
     filtered_vacancies = []
     for vacancy in list_vacancy:
-        responsibility = vacancy.get('responsibility', '').lower()
+        responsibility = vacancy.get("responsibility", "").lower()
         if any(word.lower() in responsibility for word in words):
-            filtered_vacancies.append({
-                "name": vacancy.get("name"),
-                "url": vacancy.get("url"),
-                "salary_from": vacancy.get("salary_from"),
-                "salary_to": vacancy.get("salary_to"),
-                "responsibility": responsibility
-            })
+            filtered_vacancies.append(
+                {
+                    "name": vacancy.get("name"),
+                    "url": vacancy.get("url"),
+                    "salary_from": vacancy.get("salary_from"),
+                    "salary_to": vacancy.get("salary_to"),
+                    "responsibility": responsibility,
+                }
+            )
     return filtered_vacancies
 
 
@@ -35,10 +38,11 @@ def get_vacancies_by_salary(list_vacancy: List[Dict], salary_range: str) -> List
     user_salary_to = int(salary_list[1])
     salary_filtered_vacancies = []
     for vacancy in list_vacancy:
-        salary_list_from = vacancy['salary_from']
-        salary_list_to = vacancy['salary_to']
-        if ((type(salary_list_from) == int and salary_list_from >= user_salary_from)
-                and (type(salary_list_to) == int and salary_list_to <= user_salary_to)):
+        salary_list_from = vacancy["salary_from"]
+        salary_list_to = vacancy["salary_to"]
+        if (isinstance(salary_list_from, int) and salary_list_from >= user_salary_from) and (
+            isinstance(salary_list_to, int) and salary_list_to <= user_salary_to
+        ):
             salary_filtered_vacancies.append(vacancy)
     return salary_filtered_vacancies
 

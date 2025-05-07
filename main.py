@@ -1,16 +1,16 @@
 from src.api_check import HeadHunterAPI
 from src.file_module import FileChange
+from src.user_iteration import filter_vacancies, get_top_vacancies, get_vacancies_by_salary
 from src.vacancy_module import Vacancy
-from src.user_iteration import filter_vacancies, get_vacancies_by_salary, get_top_vacancies
-
 
 # # Создание экземпляра класса для работы с API сайтов с вакансиями
 hh_api = HeadHunterAPI()
-connect_test = hh_api.connect_api()
+hh_api.connect_api()
 work_file = FileChange()
 
 
-def user_interaction():
+def user_interaction() -> None:
+    """Главная функция"""
     search_query = input("Введите поисковый запрос: ")
     list_dict_vacancy = hh_api.get_vacancies(search_query)
 

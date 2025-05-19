@@ -65,5 +65,5 @@ class HeadHunterAPI(BaseHeadHunterAPI):
                 vacancies = response.json()["items"]
                 self.vacancies.extend(vacancies)
                 if isinstance(page, int):
-                    params["page"] = page + 1
+                    params["page"] += 1
         return self.vacancies

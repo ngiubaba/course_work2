@@ -5,6 +5,7 @@ class Vacancy:
     """
     Класс для представления вакансии с основными полями: название, ссылка, зарплата и обязанности.
     """
+    __slots__ = ("name", "url", "salary_from", "salary_to", "responsibility")
 
     def __init__(self, name: str, url: str, responsibility: str, salary: Optional[Dict[str, Any]]) -> None:
         """

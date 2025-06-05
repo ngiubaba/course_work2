@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Union
-
 import requests
 
 
@@ -20,10 +19,10 @@ class BaseHeadHunterAPI(ABC):
         """
         pass
 
-    @abstractmethod
-    def connect_api(self) -> None:
-        """Метод проверки подключения к API."""
-        pass
+    # @abstractmethod
+    # def connect_api(self) -> None:
+    #     """Метод проверки подключения к API."""
+    #     pass
 
 
 class HeadHunterAPI(BaseHeadHunterAPI):
@@ -39,7 +38,7 @@ class HeadHunterAPI(BaseHeadHunterAPI):
         self.__headers = {"User-Agent": "HH-User-Agent"}
         self.vacancies: List[Dict[str, Any]] = []
 
-    def connect_api(self) -> None:
+    def __connect_api(self) -> None:
         """Проверяет подключение к API hh.ru."""
         temp_response = requests.get(self.BASE_URL, params={"text": ""})
         status_code = temp_response.status_code
@@ -57,13 +56,16 @@ class HeadHunterAPI(BaseHeadHunterAPI):
         :param page: Количество страниц, которые нужно загрузить (по 5 вакансий на страницу).
         :return: Список найденных вакансий.
         """
-        params: dict[str, Union[str, int]] = {"text": keyword, "page": 0, "per_page": 5, "area": 1}
+        self.__connect_api()  # Вызываем приватный метод для проверки подключения
 
-        while params.get("page") != page:
+        params: dict[str, Union[str, int]] = {"text": keyword, "page": 0, "per_page": 5, "area": 1}
+        while params["page"] < page:
             response = requests.get(f"{self.BASE_URL}/vacancies", headers=self.__headers, params=params)
             if response.status_code == 200:
                 vacancies = response.json()["items"]
                 self.vacancies.extend(vacancies)
-                if isinstance(page, int):
-                    params["page"] += 1
+                params["page"] += 1
+            else:
+                print(f"Ошибка при запросе страницы {params['page']}: {response.status_code}")
+                break
         return self.vacancies

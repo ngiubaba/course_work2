@@ -5,7 +5,6 @@ from src.vacancy_module import Vacancy
 
 # # Создание экземпляра класса для работы с API сайтов с вакансиями
 hh_api = HeadHunterAPI()
-hh_api.connect_api()
 work_file = FileChange()
 
 

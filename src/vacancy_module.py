@@ -109,3 +109,32 @@ class Vacancy:
             "salary_to": self.salary_to,
             "responsibility": self.responsibility,
         }
+
+    def _salary_value(self) -> int:
+        """Вспомогательный метод для получения численного значения зарплаты (от)."""
+        return self.salary_from if isinstance(self.salary_from, (int, float)) else 0
+
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, Vacancy):
+            return NotImplemented
+        return self._salary_value() == other._salary_value()
+
+    def __lt__(self, other: Any) -> bool:
+        if not isinstance(other, Vacancy):
+            return NotImplemented
+        return self._salary_value() < other._salary_value()
+
+    def __le__(self, other: Any) -> bool:
+        if not isinstance(other, Vacancy):
+            return NotImplemented
+        return self._salary_value() <= other._salary_value()
+
+    def __gt__(self, other: Any) -> bool:
+        if not isinstance(other, Vacancy):
+            return NotImplemented
+        return self._salary_value() > other._salary_value()
+
+    def __ge__(self, other: Any) -> bool:
+        if not isinstance(other, Vacancy):
+            return NotImplemented
+        return self._salary_value() >= other._salary_value()

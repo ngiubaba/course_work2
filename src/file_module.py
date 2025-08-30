@@ -1,4 +1,5 @@
 import json
+import os
 from abc import ABC, abstractmethod
 from typing import List
 
@@ -12,11 +13,37 @@ class WorkIsFile(ABC):
 
     @abstractmethod
     def save_file(self, vacancies: List[Vacancy]) -> None:
-        """
-        Абстрактный метод для сохранения списка вакансий в файл.
+        """Сохранение списка вакансий в файл"""
+        pass
 
-        :param vacancies: Список объектов вакансий
-        """
+    @abstractmethod
+    def write(self, text: list[dict], file_mode: str) -> None:
+        """Запись данных в файл"""
+        pass
+
+    @abstractmethod
+    def open_file(self) -> None:
+        """Открытие файла"""
+        pass
+
+    @abstractmethod
+    def load_vacancies_from_file(self) -> List[dict]:
+        """Загрузка данных из файла"""
+        pass
+
+    @abstractmethod
+    def add_vacancy(self, list_vacancy_hh: list[Vacancy]) -> None:
+        """Добавление новой вакансии"""
+        pass
+
+    @abstractmethod
+    def del_vacancy(self, vacancy: Vacancy) -> None:
+        """Удаление вакансии (по alternate_url)"""
+        pass
+
+    @abstractmethod
+    def delete_vacancy(self, vacancy: Vacancy) -> None:
+        """Удаление вакансии (по id_vacancy)"""
         pass
 
 
@@ -89,3 +116,32 @@ class FileChange(WorkIsFile):
                 del self.data_file[i]
                 break
         self.save_file_uniq(self.data_file)
+
+        def open_file(self) -> None:
+            """Метод открытия файла"""
+            if os.path.exists(self.__filename):
+                with open(self.__filename, mode="r", encoding="utf-8") as file:
+                    self.data_file = json.load(file)
+            else:
+                with open(self.__filename, mode="a", encoding="utf-8"):
+                    pass
+
+        def write(self, text: list[dict], file_mode: str) -> None:
+            """Запись в файл"""
+            with open(self.__filename, mode=file_mode, encoding="utf-8") as file:
+                file.write(json.dumps(text, ensure_ascii=False, indent=4))
+            self.data_file = text
+
+        def add_vacancy(self, list_vacancy_hh: list[Vacancy]) -> None:
+            """Метод добавления в файл новых вакансий"""
+            list_ids = [values["id_vacancy"] for values in self.data_file]
+            list_vacancy = [vacancy.to_dict() for vacancy in list_vacancy_hh if vacancy.requirement not in list_ids]
+            self.write(list_vacancy, "a")
+
+        def delete_vacancy(self, vacancy: Vacancy) -> None:
+            """Удаление вакансии"""
+            for index, data in enumerate(self.data_file):
+                if data["id_vacancy"] == vacancy.id_vacancy:
+                    del self.data_file[index]
+                    break
+            self.write(self.data_file, "w")

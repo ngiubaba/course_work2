@@ -1,0 +1,32 @@
+from unittest.mock import Mock
+
+import pytest
+
+from src.api_check import HeadHunterAPI
+
+
+@pytest.fixture
+def api_instance() -> HeadHunterAPI:
+    """
+    Фикстура для создания экземпляра класса HeadHunterAPI.
+    """
+    return HeadHunterAPI()
+
+
+def test_get_vacancies(mocker: Mock, api_instance: HeadHunterAPI) -> None:
+    """
+    Тестирует метод получения вакансий с API. Проверяется, что метод get_vacancies
+    корректно обрабатывает успешный ответ от сервера и возвращает список вакансий.
+    """
+    mock_response = mocker.Mock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {
+        "items": [{"id": "1", "name": "Python Developer"}, {"id": "2", "name": "Data Scientist"}]
+    }
+
+    mocker.patch("requests.get", return_value=mock_response)
+
+    result = api_instance.get_vacancies("python", page=1)
+    assert isinstance(result, list)
+    assert len(result) == 2
+    assert result[0]["name"] == "Python Developer"
